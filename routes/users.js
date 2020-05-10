@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var UserTest = require('../models/user.model');
-
+var userController = require('../controllers/user.controller');
 /* GET users listing. */
 router.get('/', function (req, res, next) {
   res.send('respond with a resource');
@@ -20,31 +20,11 @@ router.get('/allUsers2', function (req, res, next) {
 router.get('/user2', function (req, res, next) {
   res.json({ 'hi': 'hello' });
 })
-router.get('/user', function (req, res, next) {
-  UserTest.find(function (error, userdetail) {
-    if (error) {
-      res.json({
-        data: error, msg: "error", status: "101"
-      })
-    }
-    else {
-      res.json({ data: userdetail, msg: "success", status: "0" })
-    }
-  })
-})
-router.post('/user/details', function (req, res, next) {
-  let UserList = new UserTest(req.body);
-
-  UserList.save(function (error, userdetails) {
-    if (error) {
-      res.json({ data: error, msg: "error", status: "101" })
-    }
-    else {
-      res.json({ data: userdetails, msg: "data", status: "0" })
-    }
-  })
-})
-
-
+router.get('/user', userController.findAll);
+router.post('/user/details', userController.save);
+router.put('/user/update', userController.put);
+router.delete('/user/delete', userController.deleteOne);
+router.post('/user/signin',userController.saveSign)
+router.post('/user/checkvaliduser',userController.findOne)
 
 module.exports = router;

@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 const cors = require('cors');
+global.bodyParser = require('body-parser');
 
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -29,6 +30,16 @@ mongoose.connection.on('error', function (err) {
 mongoose.connection.on('disconnected', function () {
   console.log("Mongoose default connection is disconnected");
 });
+
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '50mb',
+  parameterLimit: 100000
+}))
+app.use(bodyParser.json({
+  limit: '50mb',
+  parameterLimit: 100000
+}))
 // view engine setup
 app.use(cors())
 
@@ -65,5 +76,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
